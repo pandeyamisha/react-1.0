@@ -1,11 +1,21 @@
-const heading= React.createElement('h1',{},"hello world fom react");
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Title= ()=>{
+ <h1>I am demoing functional composition</h1>
+}
+const element =<h3>I am a react element</h3>
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+const HeadingComponent = () =>
+(
+  <div>
+  <Title/>
+  <h2>I am coming from functional component</h2>
+  {"First showing that js can be written in{}" + 101}
+  {element}
+  </div>
+  )
+  
 
-const ele1 = React.createElement('div',{id:'parent'},
-  React.createElement('div',{id:'inner-div'},[
-    React.createElement('h1',{id:'child1'},"Holla , m child one"),
-    React.createElement('h2',{id:'child2'},"Holla , m child two")
-  ]),
-);
-root.render(ele1);
+root.render(<HeadingComponent/>)
