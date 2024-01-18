@@ -1,25 +1,25 @@
 import RestaurantCard from './RestaurantCard'
 import restaurants from './utils/mockData';
-import { useState } from '../../node_modules/react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Shimmer from './Shimmer';
+import { Link } from 'react-router-dom';
 const Body =() =>{
-  const [filterRes,setFilterRes] = useState([]);
+  const [totalRestaurants,setTotalRestaurants] = useState([]);
+  const[filteredRestaurants,setFilteredRestaurants] = useState([]);
   const [searchText,setSearchText] = useState("");
   useEffect(() =>{
     fetchData();
   }
 ,[])
 const fetchData = async()=>{
-  const data = await fetch("https://corsproxy.org/?https%3A%2F%2Fwww.swiggy.com%2Fdapi%2Frestaurants%2Flist%2Fv5%3Flat%3D23.022505%26lng%3D72.5713621%26page_type%3DDESKTOP_WEB_LISTING")
+  const data = await fetch("https://corsproxy.org/?https%3A%2F%2Fwww.swiggy.com%2Fdapi%2Frestaurants%2Flist%2Fv5%3Flat%3D12.9715987%26lng%3D77.5945627%26is-seo-homepage-enabled%3Dtrue%26page_type%3DDESKTOP_WEB_LISTING%22")
   const dataObj = await data.json();
   console.log("dataObj",dataObj)
-  console.log("data1",dataObj.data.cards[5].card.card.gridElements
-  .infoWithStyle.restaurants)
-  setFilterRes(dataObj?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+  setTotalRestaurants(dataObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+  setFilteredRestaurants(dataObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   }
 
-  return filterRes.length === 0 ?(
+  return totalRestaurants.length === 0 ?(
    <Shimmer/> ): (
     <div>
       <div className='search-bar'>
@@ -28,20 +28,22 @@ const fetchData = async()=>{
        value={searchText} 
        onChange={(e) => {
        setSearchText(e.target.value)
-       //setFilterRes(filterRes)
        }
       } 
       /> 
        <button onClick={()=>{
         console.log(searchText)
-        const filteredResaurants = filterRes.filter((res) =>res.info.name.toLowerCase().includes(searchText))
-        setFilterRes(filteredResaurants)
+        const filteredRestaurants = totalRestaurants.filter((res) =>res.info.name.toLowerCase().includes(searchText).toLowerCase())
+        setFilteredRestaurants(filteredRestaurants)
 
        }}>Search</button>
       </div>
-      <button onClick={() =>{setFilterRes(restaurants.filter(i => i.info.avgRating > 4))}}>Top rated restaurant</button>
+      <button onClick={() =>{setTotalRestaurants(restaurants.filter(i => i.info.avgRating > 4))}}>Top rated restaurant</button>
       <div className='res-container'>
-      {filterRes.map(restaurant=>(<RestaurantCard key={restaurant.info.id} resData = {restaurant}/>))}
+      {filteredRestaurants.map(restaurant=>(
+      <Link key={restaurant.info.id}  to ={'/restaurants/' + restaurant.info.id} ><RestaurantCard resData = {restaurant}/>
+      </Link>
+      ))}
     
       </div>
     </div>
