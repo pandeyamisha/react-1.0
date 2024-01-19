@@ -3,7 +3,8 @@ import restaurants from './utils/mockData';
 import { useState, useEffect } from 'react';
 import Shimmer from './Shimmer';
 import { Link } from 'react-router-dom';
-const Body =() =>{
+import useOnlineStatus from './utils/useOnlineStatus';
+const Body = () =>{
   const [totalRestaurants,setTotalRestaurants] = useState([]);
   const[filteredRestaurants,setFilteredRestaurants] = useState([]);
   const [searchText,setSearchText] = useState("");
@@ -14,11 +15,15 @@ const Body =() =>{
 const fetchData = async()=>{
   const data = await fetch("https://corsproxy.org/?https%3A%2F%2Fwww.swiggy.com%2Fdapi%2Frestaurants%2Flist%2Fv5%3Flat%3D12.9715987%26lng%3D77.5945627%26is-seo-homepage-enabled%3Dtrue%26page_type%3DDESKTOP_WEB_LISTING%22")
   const dataObj = await data.json();
-  console.log("dataObj",dataObj)
   setTotalRestaurants(dataObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   setFilteredRestaurants(dataObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   }
 
+  const onlineStatus = useOnlineStatus();
+  
+  if(onlineStatus === false){
+    return <h1>OOPS!! Disconnected! Kindly Check your Internet Connection</h1>
+  }
   return totalRestaurants.length === 0 ?(
    <Shimmer/> ): (
     <div>

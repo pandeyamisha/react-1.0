@@ -21,7 +21,6 @@ class UserClass extends React.Component{
     console.log( this.props.name+" render is called")
     const {name,location,contact} = this.props
     const {count1, count2, userInfo} = this.state
-    debugger;
     return(
       <div className='member-info'>
       <h3>Count : {count1}</h3>

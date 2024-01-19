@@ -1,23 +1,11 @@
-import {useEffect,useState} from 'react'
 import Shimmer from './Shimmer';
 import { useParams } from 'react-router-dom';
-import { MENU_URL } from './utils/constant';
+import useRestaurantMenu from './utils/useResaurantMenu';
 
 const RestaurantMenu = ()=> {
-  const[restaurantInfo,setrestaurantInfo] = useState(null)
   const {resId} = useParams();
-  console.log(resId)
-  useEffect(()=>{
-    fetchRestaurantMenu();
-  },[])
-
-  const url = 'https://corsproxy.org/?' + encodeURIComponent(MENU_URL)+ resId
-  console.log("url",url)
-  const fetchRestaurantMenu = async ()=>{
-   const response = await fetch(url )
-    const responseObj = await response.json();
-    setrestaurantInfo(responseObj.data);
-}
+  const restaurantInfo = useRestaurantMenu(resId)
+  console.log("res",restaurantInfo)
 if(restaurantInfo === null){
   return <Shimmer/>
 }
