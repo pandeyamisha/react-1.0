@@ -26,25 +26,26 @@ const fetchData = async()=>{
   }
   return totalRestaurants.length === 0 ?(
    <Shimmer/> ): (
-    <div>
-      <div className='search-bar'>
-       <input type='text' 
-       placeholder='enter your restaurant name' 
+    <div className='m-4 p-4'>
+      <div>
+       <input className='border border-solid border-black'type='text' 
+       placeholder='enter restaurant name' 
        value={searchText} 
        onChange={(e) => {
        setSearchText(e.target.value)
        }
       } 
       /> 
-       <button onClick={()=>{
+       <button className='m-4 px-4 button border border-solid border-orange-300  bg-orange-300 rounded-lg' onClick={()=>{
         console.log(searchText)
         const filteredRestaurants = totalRestaurants.filter((res) =>res.info.name.toLowerCase().includes(searchText).toLowerCase())
         setFilteredRestaurants(filteredRestaurants)
 
        }}>Search</button>
+      
+      <button className ='px-5 button border border-solid border-orange-300  bg-orange-300 rounded-lg' onClick={() =>{setTotalRestaurants(restaurants.filter(i => i.info.avgRating > 4))}}>Top Rated Restaurant</button>
       </div>
-      <button onClick={() =>{setTotalRestaurants(restaurants.filter(i => i.info.avgRating > 4))}}>Top rated restaurant</button>
-      <div className='res-container'>
+      <div className='flex flex-wrap'>
       {filteredRestaurants.map(restaurant=>(
       <Link key={restaurant.info.id}  to ={'/restaurants/' + restaurant.info.id} ><RestaurantCard resData = {restaurant}/>
       </Link>
