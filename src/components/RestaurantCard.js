@@ -1,5 +1,5 @@
 import { CDN_URL } from "./utils/constant";
-const RestaurantCard =(props) =>{
+const RestaurantCard = (props) =>{
   const { resData } = props;
   const {name,cuisines,avgRating,costForTwos,cloudinaryImageId} = resData?.info;
   const {deliveryTime} = resData?.info?.sla
@@ -14,6 +14,17 @@ const RestaurantCard =(props) =>{
     <h4>{deliveryTime} minutes</h4>
    </div>
   ) 
+}
+export const enhancedRestaurantCard = (RestaurantCard) =>{
+
+  return (props)=>{
+    return(
+      <div>
+    <h4>Promoted</h4>
+    <RestaurantCard {...props}/>
+    </div>
+    )
+  }
 }
 
 export default RestaurantCard;

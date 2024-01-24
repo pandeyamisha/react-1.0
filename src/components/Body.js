@@ -1,4 +1,4 @@
-import RestaurantCard from './RestaurantCard'
+import RestaurantCard, {enhancedRestaurantCard} from './RestaurantCard'
 import restaurants from './utils/mockData';
 import { useState, useEffect } from 'react';
 import Shimmer from './Shimmer';
@@ -8,6 +8,7 @@ const Body = () =>{
   const [totalRestaurants,setTotalRestaurants] = useState([]);
   const[filteredRestaurants,setFilteredRestaurants] = useState([]);
   const [searchText,setSearchText] = useState("");
+  const PromotedRestaurant = enhancedRestaurantCard(RestaurantCard)
   useEffect(() =>{
     fetchData();
   }
@@ -15,6 +16,7 @@ const Body = () =>{
 const fetchData = async()=>{
   const data = await fetch("https://corsproxy.org/?https%3A%2F%2Fwww.swiggy.com%2Fdapi%2Frestaurants%2Flist%2Fv5%3Flat%3D12.9715987%26lng%3D77.5945627%26is-seo-homepage-enabled%3Dtrue%26page_type%3DDESKTOP_WEB_LISTING%22")
   const dataObj = await data.json();
+  console.log(dataObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   setTotalRestaurants(dataObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   setFilteredRestaurants(dataObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
   }
@@ -47,7 +49,8 @@ const fetchData = async()=>{
       </div>
       <div className='flex flex-wrap'>
       {filteredRestaurants.map(restaurant=>(
-      <Link key={restaurant.info.id}  to ={'/restaurants/' + restaurant.info.id} ><RestaurantCard resData = {restaurant}/>
+      <Link key={restaurant.info.id}  to ={'/restaurants/' + restaurant.info.id} >
+        {restaurant.info.type === 'F' ?<PromotedRestaurant resData = {restaurant}/> : <RestaurantCard resData = {restaurant}/> }
       </Link>
       ))}
     
